@@ -10,3 +10,6 @@ build/
 
 # Environment variables
 .env
+
+# Database file
+db.json

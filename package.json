@@ -1,0 +1,25 @@
+{
+  "name": "pluvio",
+  "version": "1.0.0",
+  "description": "recent weather events",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pjyop/pluvio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Pjyop/pluvio/issues"
+  },
+  "homepage": "https://github.com/Pjyop/pluvio#readme",
+  "dependencies": {
+    "axios": "^1.13.6",
+    "express": "^5.2.1"
+  }
+}

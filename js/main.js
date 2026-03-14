@@ -10,26 +10,17 @@ let pci=null, sci=null, tci=null, period=30;
 
 
 async function fetchDays(n) {
-    const end   = new Date(); end.setDate(end.getDate() - 1);
-    const start = new Date(end); start.setDate(start.getDate() - n + 1);
-    const fmt   = d => d.toISOString().split('T')[0];
-    const url   = `https://api.open-meteo.com/v1/forecast`
-      + `?latitude=48.1351&longitude=11.5820`
-      + `&daily=temperature_2m_max,temperature_2m_min,temperature_2m_mean,`
-      + `precipitation_sum,snowfall_sum,sunshine_duration`
-      + `&start_date=${fmt(start)}&end_date=${fmt(end)}&timezone=Europe/Berlin`;
-    const { daily: d } = await (await fetch(url)).json();
-    return d.time.map((t, i) => ({
-      d:       new Date(t),
-      mo:      new Date(t).getMonth(),
-      precip:  d.precipitation_sum[i]   ?? 0,
-      snow:    d.snowfall_sum[i]         ?? 0,
-      tmax:    d.temperature_2m_max[i]   ?? null,
-      tmin:    d.temperature_2m_min[i]   ?? null,
-      tmean:   d.temperature_2m_mean[i]  ?? null,
-      sun:     Math.round((d.sunshine_duration[i] ?? 0) / 3600 * 10) / 10,
-      sunNorm: NSUN[new Date(t).getMonth()],
-    }));
+    const response = await fetch('/api/weather');
+    const data = await response.json();
+    
+    // Parse dates and sort
+    const sortedData = data.map(item => ({
+        ...item,
+        d: new Date(item.d)
+    })).sort((a, b) => b.d - a.d);
+
+    // Return the last n days
+    return sortedData.slice(0, n);
   }
 
 

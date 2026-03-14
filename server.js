@@ -1,33 +1,19 @@
 const express = require('express');
 const axios = require('axios');
-const fs = require('fs');
-
-const dbPath = 'db.json';
-let weatherData = [];
-
-// Load data from db.json on startup
-try {
-    if (fs.existsSync(dbPath)) {
-        const data = fs.readFileSync(dbPath);
-        weatherData = JSON.parse(data);
-    } else {
-        fs.writeFileSync(dbPath, JSON.stringify([]));
-    }
-} catch (error) {
-    console.error('Error reading or parsing db.json:', error);
-    weatherData = [];
-}
+const { kv } = require('@vercel/kv');
 
 const app = express();
 const port = 3000;
 
-app.use(express.static(__dirname));
+app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 
 const NSUN  = [2,3,5,6,7,8,8,7,5,4,2,2];                  // ensoleillement h/j
 
 async function fetchAndStoreWeather() {
     console.log('Fetching and storing weather data...');
+    let weatherData = await kv.get('weatherData') || [];
+
     const end   = new Date(); end.setDate(end.getDate() - 1);
     const start = new Date(end); start.setDate(start.getDate() - 60 + 1);
     const fmt   = d => d.toISOString().split('T')[0];
@@ -56,7 +42,7 @@ async function fetchAndStoreWeather() {
         if (newDays.length > 0) {
             weatherData.push(...newDays);
             weatherData.sort((a, b) => new Date(b.d) - new Date(a.d));
-            fs.writeFileSync(dbPath, JSON.stringify(weatherData, null, 2));
+            await kv.set('weatherData', weatherData);
             console.log(`${newDays.length} new days of weather data added.`);
         } else {
             console.log('No new weather data to add.');
@@ -67,7 +53,8 @@ async function fetchAndStoreWeather() {
     }
 }
 
-app.get('/api/weather', (req, res) => {
+app.get('/api/weather', async (req, res) => {
+  const weatherData = await kv.get('weatherData') || [];
   res.json(weatherData);
 });
 

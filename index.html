@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Météo Munich — historique</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div>
+      <h1>Munich — météo historique</h1>
+      <div class="subtitle" id="dr">—</div>
+    </div>
+    <div class="period-btns">
+      <button class="pb" onclick="go(7)">7 j</button>
+      <button class="pb active" onclick="go(30)">30 j</button>
+      <button class="pb" onclick="go(90)">90 j</button>
+      <button class="pb" onclick="go(365)">1 an</button>
+    </div>
+  </div>
+
+  <!-- Metric cards -->
+  <div class="metrics-grid">
+    <div class="mc"><div class="label">Précipitations totales</div><div class="value" id="m1">—</div><div class="sub" id="m1s">—</div></div>
+    <div class="mc"><div class="label">Température moy.</div><div class="value" id="m2">—</div><div class="sub" id="m2s">—</div></div>
+    <div class="mc"><div class="label">Ensoleillement moy.</div><div class="value" id="m5">—</div><div class="sub" id="m5s">—</div></div>
+    <div class="mc"><div class="label">Jours ensoleillés</div><div class="value" id="m6">—</div><div class="sub" id="m6s">—</div></div>
+  </div>
+
+  <!-- Indicator cards -->
+  <div class="indicators-grid">
+    <div class="card">
+      <div class="clabel">Jours de pluie</div>
+      <div class="cvalue" id="a1">—</div>
+      <div class="sbar"><div class="sfill" id="a1b" style="background:var(--blue);width:0%"></div></div>
+    </div>
+    <div class="card">
+      <div class="clabel">Précip. vs normale</div>
+      <div class="cvalue" id="a2">—</div>
+      <div id="a2b"></div>
+    </div>
+    <div class="card">
+      <div class="clabel">Soleil vs normale</div>
+      <div class="cvalue" id="a4">—</div>
+      <div id="a4b"></div>
+    </div>
+    <div class="card">
+      <div class="clabel">Série sèche actuelle</div>
+      <div class="cvalue" id="a3">—</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:2px;" id="a3s">—</div>
+    </div>
+  </div>
+
+  <!-- Précipitations chart -->
+  <div class="chart-card">
+    <div class="chart-title">Précipitations journalières (mm)</div>
+    <div class="legend">
+      <span><span class="ld" style="background:var(--blue);"></span>Pluie</span>
+      <span><span class="ld" style="background:var(--blue-light);"></span>Neige</span>
+      <span><span class="ld" style="background:var(--amber);"></span>Normale</span>
+    </div>
+    <div class="chart-wrap"><canvas id="pc"></canvas></div>
+  </div>
+
+  <!-- Ensoleillement chart -->
+  <div class="chart-card">
+    <div class="chart-title">Ensoleillement journalier (heures)</div>
+    <div class="legend">
+      <span><span class="ld" style="background:var(--amber);"></span>Heures de soleil</span>
+      <span><span class="ld" style="background:var(--amber-light);"></span>Normale saisonnière</span>
+    </div>
+    <div class="chart-wrap"><canvas id="sc"></canvas></div>
+  </div>
+
+  <!-- Températures chart -->
+  <div class="chart-card">
+    <div class="chart-title">Températures journalières (°C)</div>
+    <div class="legend">
+      <span><span class="ld" style="background:var(--red);"></span>Max</span>
+      <span><span class="ld" style="background:var(--blue);"></span>Min</span>
+      <span><span class="ld" style="background:var(--gray);"></span>Moyenne</span>
+    </div>
+    <div class="chart-wrap"><canvas id="tc"></canvas></div>
+  </div>
+
+  <div class="footer">
+    normales climatiques Munich 1991–2021
+    · <a href="https://open-meteo.com" target="_blank">open-meteo.com</a> pour les données réelles
+  </div>
+
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
